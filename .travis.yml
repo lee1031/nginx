@@ -1,0 +1,7 @@
+sudo: required
+services: docker
+script:
+  - docker build -t lee1031/nginx:1.16.1 ./1.16/1.16.1/alpine3.10/
+  - docker build -t lee1031/nginx:1.17.10 ./1.17/1.17.10/alpine
+after_script:
+  - docker images
