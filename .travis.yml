@@ -3,5 +3,6 @@ services: docker
 script:
   - docker build -t lee1031/nginx:1.17.10 ./1.17/1.17.10/alpine
   - docker build -t lee1031/nginx:1.18.0 ./1.18/1.18.0/alpine
+  - docker build -t lee1031/nginx:1.19.0 ./1.18/1.19.0/alpine
 after_script:
   - docker images
