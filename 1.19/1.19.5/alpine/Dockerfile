@@ -39,9 +39,9 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
                     --with-http_ssl_module --with-http_stub_status_module --with-http_sub_module --with-http_v2_module \
                     --with-mail --with-mail_ssl_module --with-stream --with-stream_realip_module --with-stream_ssl_module \
                     --with-stream_ssl_preread_module --with-cc-opt='-Os -fomit-frame-pointer' --with-ld-opt=-Wl,--as-needed \
+                    --with-http_v3_module --with-http_quic_module --with-stream_quic_module \
                     --add-dynamic-module=../ngx_brotli/ \
                     --add-module=../nginx-quic/ \
-                    --with-http_v3_module --with-http_quic_module --with-stream_quic_module \
      && make -j$(nproc) \
      && cp objs/ngx_http_brotli_filter_module.so /etc/nginx/modules/ \
      && cp objs/ngx_http_brotli_static_module.so /etc/nginx/modules/ \
