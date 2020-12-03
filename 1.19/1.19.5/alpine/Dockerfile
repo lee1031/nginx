@@ -19,8 +19,10 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
         gd-dev \
         geoip-dev \
         git \
+        mercurial \
      && git clone --recursive --depth=1 https://github.com/google/ngx_brotli.git \
      && wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz \
+     && hg clone -b quic https://hg.nginx.org/nginx-quic \
      && tar -zxvf nginx-${NGINX_VERSION}.tar.gz \
      && rm -rf nginx-${NGINX_VERSION}.tar.gz \
      && cd nginx-${NGINX_VERSION} \
@@ -38,6 +40,8 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
                     --with-mail --with-mail_ssl_module --with-stream --with-stream_realip_module --with-stream_ssl_module \
                     --with-stream_ssl_preread_module --with-cc-opt='-Os -fomit-frame-pointer' --with-ld-opt=-Wl,--as-needed \
                     --add-dynamic-module=../ngx_brotli/ \
+                    --add-dynamic-module=../nginx-quic/ \
+                    --with-http_v3_module --with-http_quic_module --with-stream_quic_module \
      && make -j$(nproc) \
      && cp objs/ngx_http_brotli_filter_module.so /etc/nginx/modules/ \
      && cp objs/ngx_http_brotli_static_module.so /etc/nginx/modules/ \
