@@ -40,7 +40,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
                     --with-mail --with-mail_ssl_module --with-stream --with-stream_realip_module --with-stream_ssl_module \
                     --with-stream_ssl_preread_module --with-cc-opt='-Os -fomit-frame-pointer' --with-ld-opt=-Wl,--as-needed \
                     --add-dynamic-module=../ngx_brotli/ \
-                    --add-dynamic-module=../nginx-quic/ \
+                    --add-module=../nginx-quic/ \
                     --with-http_v3_module --with-http_quic_module --with-stream_quic_module \
      && make -j$(nproc) \
      && cp objs/ngx_http_brotli_filter_module.so /etc/nginx/modules/ \
