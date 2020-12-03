@@ -6,21 +6,39 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     && apk update \
     && apk upgrade \
     && apk --update --virtual build-deps add \
-        gcc \
-        libc-dev \
-        make \
+        autoconf \
+		automake \
+		bind-tools \
+		binutils \
+		build-base \
+		ca-certificates \
+		cmake \
+		curl \
+		gcc \
+		gd-dev \
+		geoip-dev \
+		git \
+		gnupg \
+		go \
+		libc-dev \
+		libgcc \
+		libstdc++ \
+		libtool \
+		libxslt-dev \
+		linux-headers \
+		make \
+		pcre \
+		pcre-dev \
+		perl-dev \
+		su-exec \
+		tar \
+		tzdata \
+		zlib \
+		zlib-dev \
         openssl-dev \
-        pcre-dev \
-        zlib-dev \
         linux-headers \
-        curl \
         gnupg1 \
-        libxslt-dev \
-        gd-dev \
-        geoip-dev \
-        git \
         mercurial \
-        cmake \
      && git clone --recursive --depth=1 https://github.com/google/ngx_brotli.git  \
      && git clone --recursive --depth=1 https://github.com/google/boringssl.git \
      && cd boringssl \
