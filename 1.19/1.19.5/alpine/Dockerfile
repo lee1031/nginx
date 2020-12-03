@@ -22,7 +22,13 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
         mercurial \
      && git clone --recursive --depth=1 https://github.com/google/ngx_brotli.git \
      && wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz \
+     && git clone --recursive --depth=1 https://github.com/google/boringssl.git \
      && hg clone -b quic https://hg.nginx.org/nginx-quic \
+     && cd nginx-quic \
+     && ./auto/configure --with-debug --with-http_v3_module       \
+                               --with-cc-opt="-I../boringssl/include"   \
+                               --with-ld-opt="-L../boringssl/build/ssl -L../boringssl/build/crypto" \
+     && cd .. \
      && tar -zxvf nginx-${NGINX_VERSION}.tar.gz \
      && rm -rf nginx-${NGINX_VERSION}.tar.gz \
      && cd nginx-${NGINX_VERSION} \
