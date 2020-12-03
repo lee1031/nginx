@@ -19,12 +19,17 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
         gd-dev \
         geoip-dev \
         git \
-     && git clone --recursive --depth=1 https://github.com/google/ngx_brotli.git \
-     && wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz \
-     && tar -zxvf nginx-${NGINX_VERSION}.tar.gz \
-     && rm -rf nginx-${NGINX_VERSION}.tar.gz \
-     && cd nginx-${NGINX_VERSION} \
-     && ./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib/nginx/modules \
+        mercurial \
+     && git clone --recursive --depth=1 https://github.com/google/ngx_brotli.git  \
+     && git clone --recursive --depth=1 https://github.com/google/boringssl.git \
+     && cd boringssl \
+     && mkdir build && cd build && cmake ../ && make && cd ../ \
+     && mkdir -p .openssl/lib && cd .openssl && ln -s ../include . && cd ../ \
+     && cp build/crypto/libcrypto.a build/ssl/libssl.a .openssl/lib \
+     && cd ../ \
+     && hg clone -b quic https://hg.nginx.org/nginx-quic \
+     && cd nginx-quic \
+     && ./auto/configure  --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib/nginx/modules \
                     --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log \
                     --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock \
                     --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp \
@@ -37,11 +42,15 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
                     --with-http_ssl_module --with-http_stub_status_module --with-http_sub_module --with-http_v2_module \
                     --with-mail --with-mail_ssl_module --with-stream --with-stream_realip_module --with-stream_ssl_module \
                     --with-stream_ssl_preread_module --with-cc-opt='-Os -fomit-frame-pointer' --with-ld-opt=-Wl,--as-needed \
+                    --with-http_v3_module --with-http_quic_module --with-stream_quic_module \
                     --add-dynamic-module=../ngx_brotli/ \
+                    --with-debug --with-http_v3_module       \
+                    --with-cc-opt="-I../boringssl/include"   \
+                    --with-ld-opt="-L../boringssl/build/ssl -L../boringssl/build/crypto" \
      && make -j$(nproc) \
      && cp objs/ngx_http_brotli_filter_module.so /etc/nginx/modules/ \
      && cp objs/ngx_http_brotli_static_module.so /etc/nginx/modules/ \
-     && cd .. && rm -rf nginx-${NGINX_VERSION} && rm -rf ngx_brotli \
+     && cd .. && rm -rf nginx-quic && rm -rf ngx_brotli \
      && apk \
         del build-deps \
      && rm -rf /var/cache/apk/* /var/lib/apk/* /etc/apk/cache/* \
