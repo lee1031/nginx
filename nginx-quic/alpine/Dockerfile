@@ -20,6 +20,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
         geoip-dev \
         git \
         mercurial \
+        cmake \
      && git clone --recursive --depth=1 https://github.com/google/ngx_brotli.git  \
      && git clone --recursive --depth=1 https://github.com/google/boringssl.git \
      && cd boringssl \
