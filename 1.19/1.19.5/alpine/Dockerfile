@@ -23,6 +23,11 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
      && git clone --recursive --depth=1 https://github.com/google/ngx_brotli.git \
      && wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz \
      && git clone --recursive --depth=1 https://github.com/google/boringssl.git \
+     && cd boringssl \
+     && mkdir build && cd build && cmake ../ && make && cd ../ \
+     && mkdir -p .openssl/lib && cd .openssl && ln -s ../include . && cd ../ \
+     && cp build/crypto/libcrypto.a build/ssl/libssl.a .openssl/lib \
+     && cd ../ \
      && hg clone -b quic https://hg.nginx.org/nginx-quic \
      && cd nginx-quic \
      && ./auto/configure --with-debug --with-http_v3_module       \
