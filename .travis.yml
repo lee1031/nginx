@@ -1,6 +1,7 @@
 sudo: required
 services: docker
 script:
-  - docker build -t lee1031/nginx:1.19.10 ./1.19/1.19.10/alpine
+  - docker build -t lee1031/nginx:1.20.0 ./1.20/1.20.0/alpine
+  - docker build -t lee1031/nginx:1.21.0 ./1.21/1.21.0/alpine
 after_script:
   - docker images
